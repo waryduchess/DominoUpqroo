@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "package.json": "^2.0.1"
-  }
+  },
+  "name": "dominoupqroo",
+  "description": "juego de domino clasico de mesa en nodeJS",
+  "version": "1.0.0",
+  "main": "domino.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
