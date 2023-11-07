@@ -1,5 +1,5 @@
 const rl = require("readline-sync");
-
+const fichasRevueltas =require("./modulesdomino/shuffle-fichas");
 
 var left = [1,2,3,4,5,6];
 var right = [1,2,3,4,5,6];
@@ -26,6 +26,7 @@ dominos.push({izquierda:6, derecha:6, posicion:position[1]})
 console.log("las fichas con",dominos);
 const players = rl.question("¿cuantos jugadores seran?", {});
 const totalfichas = players * 5;
+fichasRevueltas(dominos);
 var dominoplayers = {};
 
 for (var cTfichas = 0; cTfichas < 5; cTfichas++) {
