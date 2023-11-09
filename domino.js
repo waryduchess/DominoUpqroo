@@ -1,5 +1,6 @@
 const rl = require("readline-sync");
 const fichasRevueltas =require("./modulesdomino/shuffle-fichas");
+const selectOption = require("./modulesdomino/seleccion-fichas")
 
 var left = [1,2,3,4,5,6];
 var right = [1,2,3,4,5,6];
@@ -41,6 +42,9 @@ for (var cTfichas = 0; cTfichas < 5; cTfichas++) {
   console.log(dominoplayers);
   console.log(dominos)
   var well = [];
- 
+
 //well.push(dominos.shift());
-  //console.log(well);
+  //console.log(well)
+  selectOption(dominoplayers["player_" + 0], "CHOICE").then(ficha => {
+    console.log("Has seleccionado la ficha: ", ficha);
+});
