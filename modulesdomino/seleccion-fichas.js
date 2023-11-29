@@ -24,12 +24,21 @@ function selectionDomino(opciones, option) {
     switch (option) {
         case "CHOICE":
             // Se mapea el array de opciones de dominó a un formato compatible con inquirer
-            const fichasArray = opciones.map((ficha, index) =>
+            const fichasArray = opciones.map((ficha) =>
                 ({
-                    value: index,
+                    value: ficha,
                     name: `Ficha: Izquierda: ${ficha.izquierda}, Derecha: ${ficha.derecha}, Posición: ${ficha.posicion}`,
                 })
-            );
+            )
+            fichasArray.push({
+                //agregar dos opciones nuevas(tomar del deck y decir uno)
+                value: {izquierda:"+1", derecha:"+1",posicion:"N/A"}, 
+                name: `agarrar ficha del pozo`
+              });     
+           // fichasArray.push({
+             //   value: fichas,
+               // name: `tomar ficha del pozo`
+            //})
             // Se llama a la función selectOption para que el usuario elija una ficha de la lista
             seleccion = selectOption(fichasArray, "Selecciona una ficha:");
             break;
