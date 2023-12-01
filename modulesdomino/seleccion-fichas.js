@@ -17,7 +17,7 @@ async function selectOption(options, message = "Selecciona una opción:") {
 }
 
 // Función que realiza la selección de un domino basado en la opción proporcionada
-function selectionDomino(opciones, option) {
+async function selectionDomino(opciones, option) {
     var seleccion = null;
 
     // Se utiliza un switch para determinar el comportamiento según la opción proporcionada
@@ -40,7 +40,7 @@ function selectionDomino(opciones, option) {
                // name: `tomar ficha del pozo`
             //})
             // Se llama a la función selectOption para que el usuario elija una ficha de la lista
-            seleccion = selectOption(fichasArray, "Selecciona una ficha:");
+            seleccion = await selectOption(fichasArray, "Selecciona una ficha:");
             break;
         default:
             // En caso de que la opción no coincida con ninguna acción conocida, no se realiza ninguna selección

@@ -89,6 +89,7 @@ async function jugar() {
   let jugadorConMulaMasAlta;
   let valorMulaMasAlta = 0;
 
+
   for (const jugador in dominoplayers) {
     const mulaActual = Math.max(
       ...dominoplayers[jugador].fichas.filter(domino => domino.posicion === "vertical")
@@ -100,19 +101,37 @@ async function jugar() {
       jugadorConMulaMasAlta = jugador;
     }
   }
-  const result = await (selectionDomino(dominoplayers[jugadorConMulaMasAlta].fichas, "CHOICE"))
-  
+  var jugadorI = jugadorConMulaMasAlta
+
+  console.log("jugador acual", jugadorConMulaMasAlta)
+  var result = await (selectionDomino(dominoplayers[jugadorI].fichas, "CHOICE"))
+  result = result.selectedOption
+  if (
+    result.izquierda === "+1"
+  ) {
+    dominoplayers[jugadorI].fichas.push(dominos.shift());
+  } else if (result.derecha === "+1") {
+    console.log("derecha")
+  }
+
+  let dominoIndex = dominoplayers[jugadorI].fichas.findIndex((ficha) => {
+    return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha;
+  });
 
 
-    
-   
-  
-
-
-
-
-
+console.log(dominoplayers[jugadorI].fichas);
 }
+
+
+
+
+
+
+
+
+
+
+
 // Aqui va el index obtenido
 // Buscar carta seleccionada
 // obtener el index de la carta (buscar result en el arreglo cardsPlayers[player])
