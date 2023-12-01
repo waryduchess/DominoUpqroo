@@ -54,10 +54,13 @@ async function jugar() {
   for (var cTfichas = 0; cTfichas < 5; cTfichas++) {
     for (var cPlayers = 0; cPlayers < players; cPlayers++) {
       if (!dominoplayers["player_" + cPlayers]) {
-        dominoplayers["player_" + cPlayers] = [];
+        dominoplayers["player_" + cPlayers] = {
+          fichas: [],
+          puntaje: 0
+        };
       }
 
-      dominoplayers["player_" + cPlayers].push(dominos.shift());
+      dominoplayers["player_" + cPlayers].fichas.push(dominos.shift());
     }
   }
 
@@ -84,32 +87,30 @@ async function jugar() {
     }
   }
   let jugadorConMulaMasAlta;
-let valorMulaMasAlta = 0;
+  let valorMulaMasAlta = 0;
 
-for (const jugador in dominoplayers) {
-  const mulaActual = Math.max(
-    ...dominoplayers[jugador].filter(domino => domino.posicion === "vertical")
-      .map(domino => domino.izquierda)
-  );
+  for (const jugador in dominoplayers) {
+    const mulaActual = Math.max(
+      ...dominoplayers[jugador].fichas.filter(domino => domino.posicion === "vertical")
+        .map(domino => domino.izquierda)
+    );
 
-  if (mulaActual > valorMulaMasAlta) {
-    valorMulaMasAlta = mulaActual;
-    jugadorConMulaMasAlta = jugador;
+    if (mulaActual > valorMulaMasAlta) {
+      valorMulaMasAlta = mulaActual;
+      jugadorConMulaMasAlta = jugador;
+    }
   }
-}
-    const result = await (selectionDomino(dominoplayers[jugadorConMulaMasAlta], "CHOICE"))
-    .selectionDomino;
-    let cardIndex = dominoplayers["player_"+0].findIndex((fichas) => {
-      if (result.derecha === "+1") {
-        dominoplayers["player_" + 0].push(dominos.shift())
-      } else if (validationFichas(dominoplayers["player_" + 0][cardIndex])){
-      }else{
-      }
-      return fichas.derecha == result.derecha && fichas.izquierda == result.izquierda;
-    });
+  const result = await (selectionDomino(dominoplayers[jugadorConMulaMasAlta].fichas, "CHOICE"))
+  
 
 
- 
+    
+   
+  
+
+
+
+
 
 }
 // Aqui va el index obtenido
