@@ -31,3 +31,24 @@ function imprimirJuego(dominoplayers, well) {
 
 // Exporta la función seleccionFichas para que pueda ser utilizada en otros módulos
 module.exports = seleccionFichas;
+function jugadorConMasPuntos() {
+  var maxPuntos = 0;
+  var jugadoresConMaxPuntos = [];
+
+  for (const jugadorI in dominoplayers) {
+    var puntos = calcularPuntos("player_"+jugadorI);
+    if (puntos > maxPuntos) {
+      maxPuntos = puntos;
+      jugadoresConMaxPuntos = ["player_"+jugadorI]; // Comienza una nueva lista de jugadores con la puntuación más alta
+    } else if (puntos === maxPuntos) {
+      jugadoresConMaxPuntos.push("player_"+jugadorI); // Agrega a este jugador a la lista de jugadores con la puntuación más alta
+    }
+  }
+
+  // Imprime el jugador o los jugadores con más puntos
+  if (jugadoresConMaxPuntos.length === 1) {
+    console.log(`El jugador con más puntos es ${jugadoresConMaxPuntos[0]} con ${maxPuntos} puntos.`);
+  } else {
+    console.log(`Hay un empate entre los siguientes jugadores, todos con ${maxPuntos} puntos: ${jugadoresConMaxPuntos.join(", ")}`);
+  }
+}

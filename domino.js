@@ -1,9 +1,8 @@
 // Importación de módulos necesarios
 const rl = require("readline-sync");
 const fichasRevueltas = require("./modulesdomino/shuffle-fichas");
-const selectOption = require("./modulesdomino/seleccion-fichas");
 const selectionDomino = require("./modulesdomino/seleccion-fichas");
-const nextPlayer = require("./modulesdomino/nextplayer");
+const contadorPuntos = require("./modulesdomino/puntos");
 // Arrays que representan los posibles valores para los lados izquierdo y derecho de los dominós
 var left = [1, 2, 3, 4, 5, 6];
 var right = [1, 2, 3, 4, 5, 6];
@@ -75,9 +74,9 @@ async function jugar() {
 
   function validationFichas(fichas) {
     if (
-      fichas.izquierda == well[well.length - 1].izquierda ||
+      fichas.izquierda == well[0].izquierda ||
       fichas.derecha == well[well.length - 1].izquierda ||
-      fichas.izquierda == well[well.length - 1].derecha ||
+      fichas.izquierda == well[0].derecha ||
       fichas.derecha == well[well.length - 1].derecha
     ) {
       return true;
@@ -98,66 +97,56 @@ async function jugar() {
       valorMulaMasAlta = mulaActual;
       jugadorConMulaMasAlta = jugador.substring(7); // Quita el prefijo "player_"
     }
-}
+  }
 
   var jugadorI = jugadorConMulaMasAlta;
-  var finDelJuego = false
+ 
+  do {
+    let finDelJuego = false
+    let inicioJuego = false
+    console.log('ficha del lado izquierdo:',well[0]);
+    console.log('ficha del lado derecho:',well[well.length-1]);
+    while (finDelJuego == false) {
+      console.log("jugador actual", "player_" + jugadorI)
 
-  var inicioJuego = false
-  while (finDelJuego == false) {
-    console.log("jugador actual", "player_"+jugadorI)
-    var result = await (selectionDomino(dominoplayers["player_"+jugadorI].fichas, "CHOICE"))
+      //well[0], "ficha del lado derecho", well[well.length])
+      var result = await (selectionDomino(dominoplayers["player_" + jugadorI].fichas, "CHOICE"))
+      
+      result = result.selectedOption
 
-    result = result.selectedOption
+      var indiceFicha = dominoplayers["player_" + jugadorI].fichas.findIndex((ficha) => {
+        return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha
+      })
 
-    var indiceFicha = dominoplayers["player_"+jugadorI].fichas.findIndex((ficha) => {
-      return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha
-    })
+      if (
+        result.izquierda === "+1"
+      ) {
+        dominoplayers["player_" + jugadorI].fichas.push(dominos.shift());
+      } else if (inicioJuego == false && result.izquierda == result.derecha) {
+        well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+        inicioJuego = true;
+        jugadorI = (jugadorI + 1) % players
 
-    if (
-      result.izquierda === "+1"
-    ) {
-      dominoplayers["player_"+jugadorI].fichas.push(dominos.shift());
-    } else if (inicioJuego == false) {
-      well.push(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
-      inicioJuego = true;
+      } else if (validationFichas(result)) {
+        if (result.derecha == well[0].izquierda && result.izquierda == well[0].izquierda) {
+          well.shift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
 
-    } else if (validationFichas(result)) {
-      if (result.derecha == well[well.length - 1].izquierda && result.izquierda == well[well.length - 1].izquierda) {
-        well.shift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
+        } else if (result.izquierda == well[well.length - 1].derecha && result.derecha == well[well.length - 1].derecha) {
+          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
 
-      } else if (result.izquierda == well[well.length - 1].derecha && result.derecha == well[well.length - 1].derecha) {
-        well.push(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
+        } else if (result.izquierda === "terminar") {
+          contadorPuntos(dominoplayers[ jugadorI])
+
+          console.log(finDelJuego)
+        } else if (result.izquierda === "saltarTurno") {
+          jugadorI = (jugadorI + 1) % players
+        }
+        jugadorI = (jugadorI + 1) % players
+
       }
-      jugadorI = (jugadorI+1)%players
-
+     
     }
-
-
-    console.log(jugadorI)
-    console.log(validationFichas(result))
-  }
+  } while (winner == false)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Aqui va el index obtenido
-// Buscar carta seleccionada
-// obtener el index de la carta (buscar result en el arreglo cardsPlayers[player])
-
-//llave de la funcion jugar
-
 jugar();
-// Array para almacenar todos los dominós posibles
+

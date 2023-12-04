@@ -34,7 +34,19 @@ async function selectionDomino(opciones, option) {
                 //agregar dos opciones nuevas(tomar del deck y decir uno)
                 value: {izquierda:"+1", derecha:"+1",posicion:"N/A"}, 
                 name: `agarrar ficha del pozo`
-              });     
+              }),
+              fichasArray.push({
+                //agregar dos opciones nuevas(tomar del deck y decir uno)
+                value: {izquierda:"terminar", derecha:"terminar",posicion:"N/A"}, 
+                name: `contar puntos`
+              }),
+              fichasArray.push({
+                //agregar dos opciones nuevas(tomar del deck y decir uno)
+                value: {izquierda:"saltarTurno", derecha:"saltarTurno",posicion:"N/A"}, 
+                name: `saltar turno`
+              }),
+    
+
            // fichasArray.push({
              //   value: fichas,
                // name: `tomar ficha del pozo`
