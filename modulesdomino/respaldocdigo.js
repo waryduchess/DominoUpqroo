@@ -1,9 +1,9 @@
 // Importación de módulos necesarios
 const rl = require("readline-sync");
-const fichasRevueltas = require("./modulesdomino/shuffle-fichas");
-const selectOption = require("./modulesdomino/seleccion-fichas");
-const selectionDomino = require("./modulesdomino/seleccion-fichas");
-const nextPlayer = require("./modulesdomino/nextplayer");
+const fichasRevueltas = require("./shuffle-fichas");
+const selectOption = require("./seleccion-fichas");
+const selectionDomino = require("./seleccion-fichas");
+
 // Arrays que representan los posibles valores para los lados izquierdo y derecho de los dominós
 var left = [1, 2, 3, 4, 5, 6];
 var right = [1, 2, 3, 4, 5, 6];
@@ -72,6 +72,7 @@ async function jugar() {
 
   // Array para almacenar los dominós seleccionados (actualmente vacío)
   var well = [];
+  well.push(dominos.shift());
 
   function validationFichas(fichas) {
     if (
@@ -88,6 +89,7 @@ async function jugar() {
   let jugadorConMulaMasAlta;
   let valorMulaMasAlta = 0;
 
+
   for (const jugador in dominoplayers) {
     const mulaActual = Math.max(
       ...dominoplayers[jugador].fichas.filter(domino => domino.posicion === "vertical")
@@ -96,52 +98,34 @@ async function jugar() {
 
     if (mulaActual > valorMulaMasAlta) {
       valorMulaMasAlta = mulaActual;
-      jugadorConMulaMasAlta = jugador.substring(7); // Quita el prefijo "player_"
+      jugadorConMulaMasAlta = jugador;
     }
-}
-
-  var jugadorI = jugadorConMulaMasAlta;
-  var finDelJuego = false
-
-  var inicioJuego = false
-  while (finDelJuego == false) {
-    console.log("jugador actual", "player_"+jugadorI)
-    var result = await (selectionDomino(dominoplayers["player_"+jugadorI].fichas, "CHOICE"))
-
-    result = result.selectedOption
-
-    var indiceFicha = dominoplayers["player_"+jugadorI].fichas.findIndex((ficha) => {
-      return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha
-    })
-
-    if (
-      result.izquierda === "+1"
-    ) {
-      dominoplayers["player_"+jugadorI].fichas.push(dominos.shift());
-    } else if (inicioJuego == false) {
-      well.push(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
-      inicioJuego = true;
-
-    } else if (validationFichas(result)) {
-      if (result.derecha == well[well.length - 1].izquierda && result.izquierda == well[well.length - 1].izquierda) {
-        well.shift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
-
-      } else if (result.izquierda == well[well.length - 1].derecha && result.derecha == well[well.length - 1].derecha) {
-        well.push(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
-      }
-      jugadorI = (jugadorI+1)%players
-
-    }
-
-
-    console.log(jugadorI)
-    console.log(validationFichas(result))
   }
+  var jugadorI = jugadorConMulaMasAlta
+
+var inicioJuego = false
+  console.log("jugador acual", jugadorConMulaMasAlta)
+  var result = await (selectionDomino(dominoplayers[jugadorI].fichas, "CHOICE"))
+  result = result.selectedOption
+  console.log(well);
+  if (
+    result.izquierda === "+1"
+  ) {
+    dominoplayers[jugadorI].fichas.push(dominos.shift());
+  } else if (inicioJuego = false) {
+    console.log("derecha")
+    inicioJuego = true;
+  } else if(validationFichas(result)){
+    well.push(dominoplayers[jugadorConMulaMasAlta].fichas.splice(dominoIndex, 1)[0]);
+  }
+
+  let dominoIndex = dominoplayers[jugadorI].fichas.findIndex((ficha) => {
+    return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha;
+  });
+
+jugadorI = (jugadorI + 1)% players; 
+
 }
-
-
-
-
 
 
 
