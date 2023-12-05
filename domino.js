@@ -105,6 +105,28 @@ async function jugar() {
     return dominoplayers[jugadorI].puntaje = puntos;
   }
 
+  function jugadorConPuntajeMasBajo(dominoplayers) {
+    let minPuntaje = Infinity;
+    let jugadorMinPuntaje = null;
+
+    for (let jugador in dominoplayers) {
+      if (dominoplayers[jugador].puntaje < minPuntaje) {
+        minPuntaje = dominoplayers[jugador].puntaje;
+        jugadorMinPuntaje = jugador;
+      }
+    }
+
+    return jugadorMinPuntaje;
+  }
+  function jugadorSinFichas(dominoplayers) {
+    for (let jugador in dominoplayers) {
+      if (dominoplayers[jugador].fichas.length === 0) {
+        return { indice: jugador, sinFichas: true };
+      }
+    }
+    return { indice: null, sinFichas: false };
+  }
+
   // Calculamos los puntos para cada jugador
 
 
@@ -135,7 +157,7 @@ async function jugar() {
       console.log("jugador actual", "player_" + jugadorI)
       console.log('ficha del lado izquierdo:', well[0]);
       console.log('ficha del lado derecho:', well[well.length - 1]);
-
+      console.log(well);
       //well[0], "ficha del lado derecho", well[well.length])
       var result = await (selectionDomino(dominoplayers["player_" + jugadorI].fichas, "CHOICE"))
 
@@ -144,8 +166,10 @@ async function jugar() {
       var indiceFicha = dominoplayers["player_" + jugadorI].fichas.findIndex((ficha) => {
         return ficha.izquierda == result.izquierda && ficha.derecha == result.derecha
       })
-
-      if (
+      if (jugadorSinFichas(dominoplayers).sinFichas == true) {
+        console.log("el ganador es ", "player_" + jugadorSinFichas(dominoplayers).indice)
+        finDelJuego = !finDelJuego
+      } else if (
         result.izquierda === "+1"
       ) {
         dominoplayers["player_" + jugadorI].fichas.push(dominos.shift());
@@ -156,13 +180,15 @@ async function jugar() {
         for (var i = 0; i < players; i++) {
           calcularPuntos("player_" + i);
           console.log("players_" + i, dominoplayers["player_" + i].puntaje, "puntos")
+          console.log("el jugador con ", dominoplayers[jugadorConPuntajeMasBajo(dominoplayers)].puntaje), "es el ganador";
         }
+
         finDelJuego = !finDelJuego
 
       } else if (inicioJuego == false && result.izquierda == result.derecha) {
         console.log("funciona please")
         well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-        //inicioJuego = true;
+        // inicioJuego = true;
         jugadorI = (jugadorI + 1) % players
 
 
@@ -173,14 +199,14 @@ async function jugar() {
         well.unshift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
 
       } else if (validationIzquierda(result)) {
-        console.log("funciona please")
+        console.log("funciona pleasa izquierda")
         well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
 
 
 
 
 
-        
+
 
       }
       jugadorI = (jugadorI + 1) % players
