@@ -43,6 +43,7 @@ async function jugar() {
   // Calculando el número total de dominós necesarios para todos los jugadores
   const totalfichas = players * 5;
 
+
   // Barajando los dominós de forma aleatoria
   fichasRevueltas(dominos);
 
@@ -72,11 +73,23 @@ async function jugar() {
   // Array para almacenar los dominós seleccionados (actualmente vacío)
   var well = [];
 
-  function validationFichas(fichas) {
+
+  function validationIzquierda(fichas) {
     if (
       fichas.izquierda == well[0].izquierda ||
+
+      fichas.izquierda == well[0].derecha
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function validationDerecha() {
+    if (
+
       fichas.derecha == well[well.length - 1].izquierda ||
-      fichas.izquierda == well[0].derecha ||
+
       fichas.derecha == well[well.length - 1].derecha
     ) {
       return true;
@@ -84,6 +97,19 @@ async function jugar() {
       return false;
     }
   }
+  function calcularPuntos(jugadorI) {
+    var puntos = 0;
+    for (const ficha of dominoplayers[jugadorI].fichas) {
+      puntos += ficha.izquierda + ficha.derecha;
+    }
+    return dominoplayers[jugadorI].puntaje = puntos;
+  }
+
+  // Calculamos los puntos para cada jugador
+
+
+  // Mostramos los puntos de cada jugador
+
   let jugadorConMulaMasAlta;
   let valorMulaMasAlta = 0;
 
@@ -100,18 +126,19 @@ async function jugar() {
   }
 
   var jugadorI = jugadorConMulaMasAlta;
- 
+
   do {
     let finDelJuego = false
     let inicioJuego = false
-    console.log('ficha del lado izquierdo:',well[0]);
-    console.log('ficha del lado derecho:',well[well.length-1]);
+
     while (finDelJuego == false) {
       console.log("jugador actual", "player_" + jugadorI)
+      console.log('ficha del lado izquierdo:', well[0]);
+      console.log('ficha del lado derecho:', well[well.length - 1]);
 
       //well[0], "ficha del lado derecho", well[well.length])
       var result = await (selectionDomino(dominoplayers["player_" + jugadorI].fichas, "CHOICE"))
-      
+
       result = result.selectedOption
 
       var indiceFicha = dominoplayers["player_" + jugadorI].fichas.findIndex((ficha) => {
@@ -122,31 +149,45 @@ async function jugar() {
         result.izquierda === "+1"
       ) {
         dominoplayers["player_" + jugadorI].fichas.push(dominos.shift());
-      } else if (inicioJuego == false && result.izquierda == result.derecha) {
-        well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-        inicioJuego = true;
+      } else if (result.izquierda === "saltarTurno") {
         jugadorI = (jugadorI + 1) % players
 
-      } else if (validationFichas(result)) {
-        if (result.derecha == well[0].izquierda && result.izquierda == well[0].izquierda) {
-          well.shift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
-
-        } else if (result.izquierda == well[well.length - 1].derecha && result.derecha == well[well.length - 1].derecha) {
-          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-
-        } else if (result.izquierda === "terminar") {
-          contadorPuntos(dominoplayers[ jugadorI])
-
-          console.log(finDelJuego)
-        } else if (result.izquierda === "saltarTurno") {
-          jugadorI = (jugadorI + 1) % players
+      } else if (result.izquierda === "terminar") {
+        for (var i = 0; i < players; i++) {
+          calcularPuntos("player_" + i);
+          console.log("players_" + i, dominoplayers["player_" + i].puntaje, "puntos")
         }
+        finDelJuego = !finDelJuego
+
+      } else if (inicioJuego == false && result.izquierda == result.derecha) {
+        console.log("funciona please")
+        well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+        //inicioJuego = true;
         jugadorI = (jugadorI + 1) % players
+
+
+
+      } else if (validationDerecha(result)) {
+
+        console.log("funciona please")
+        well.unshift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
+
+      } else if (validationIzquierda(result)) {
+        console.log("funciona please")
+        well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+
+
+
+
+
+        
 
       }
-     
-    }
-  } while (winner == false)
+      jugadorI = (jugadorI + 1) % players
+    } winner == !winner
+
+  } while (winner = false)
 }
+
 jugar();
 
