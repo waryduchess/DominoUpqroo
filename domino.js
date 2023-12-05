@@ -152,13 +152,31 @@ async function jugar() {
   do {
     let finDelJuego = false
     let inicioJuego = false
-
+    let valIzquierda = false
+    let valDerecha = false
     while (finDelJuego == false) {
-      console.log("jugador actual", "player_" + jugadorI)
-      console.log('ficha del lado izquierdo:', well[0]);
+
+      console.log("jugador actual", "player_" + jugadorI);
+   
+      if(inicioJuego == false){
+      
+      }else if(valIzquierda == true){
+        console.log(well[0].izquierda, "tiene que ser igual al valor de derecha")
+      }else if(valIzquierda == false){
+        console.log(well[0].derecha, "tiene que ser igual al valor de izquierda")
+      }else{
+      };
+      
+      if(inicioJuego == false){
+      }else if(valDerecha == false){
+        console.log(well[well.length - 1].derecha, "tiene que ser igual al valor de izquierda")
+      }else if(valDerecha == true){
+        console.log(well[well.length - 1].izquierda, "tiene que ser igual al valor de izquierda")
+      };
+
       console.log('ficha del lado derecho:', well[well.length - 1]);
       console.log(well);
-      //well[0], "ficha del lado derecho", well[well.length])
+
       var result = await (selectionDomino(dominoplayers["player_" + jugadorI].fichas, "CHOICE"))
 
       result = result.selectedOption
@@ -186,28 +204,50 @@ async function jugar() {
         finDelJuego = !finDelJuego
 
       } else if (inicioJuego == false && result.izquierda == result.derecha) {
-        console.log("funciona please")
         well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-        
+
         inicioJuego = true;
         jugadorI = (jugadorI + 1) % players
 
 
 
       } else if (validationDerecha(result) == true) {
+        if (valDerecha == false && well[well.length - 1].izquierda == result.izquierda) {
+          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valDerecha = !valDerecha
+        } else if (valDerecha == false && well[well.length - 1].izquierda == result.derecha) {
+          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valDerecha = !valDerecha
+        } else if (valDerecha == true && well[well.length - 1].derecha == result.izquierda) {
+          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valDerecha = !valDerecha
+        } else if (valDerecha == true && well[well.length - 1].derecha == result.derecha) {
+          well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valDerecha = !valDerecha
+        }
 
-        console.log("funciona please")
-       
-        well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
       } else if (validationIzquierda(result) == true) {
-        console.log("funciona pleasa izquierda")
-        well.unshift(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
-      }
-      jugadorI = (jugadorI + 1) % players
-    } winner == !winner
+        if (valIzquierda == false && well[0].izquierda == result.izquierda) {
+          well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valIzquierda = !valIzquierda
+        } else if (valIzquierda == false && well[0].izquierda == result.derecha) {
+          well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valIzquierda = !valIzquierda
+        } else if (valDerecha == true && well[well.length - 1].derecha == result.izquierda) {
+          well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valIzquierda = !valIzquierda
+        } else if (valDerecha == true && well[well.length - 1].derecha == result.derecha) {
+          well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
+          valIzquierda = !valIzquierda
+        }
 
+
+        jugadorI = (jugadorI + 1) % players
+      } winner == !winner
+    }
   } while (winner = false)
 }
+
 
 jugar();
 
