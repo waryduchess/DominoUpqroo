@@ -76,9 +76,9 @@ async function jugar() {
 
   function validationIzquierda(fichas) {
     if (
-      fichas.izquierda == well[0].izquierda ||
+      result.derecha == well[0].izquierda ||
 
-      fichas.izquierda == well[0].derecha
+      result.izquierda == well[0].izquierda
     ) {
       return true;
     } else {
@@ -88,9 +88,9 @@ async function jugar() {
   function validationDerecha() {
     if (
 
-      fichas.derecha == well[well.length - 1].izquierda ||
+      result.derecha == well[well.length - 1].derecha ||
 
-      fichas.derecha == well[well.length - 1].derecha
+      result.izquierda == well[well.length - 1].derecha
     ) {
       return true;
     } else {
@@ -180,7 +180,7 @@ async function jugar() {
         for (var i = 0; i < players; i++) {
           calcularPuntos("player_" + i);
           console.log("players_" + i, dominoplayers["player_" + i].puntaje, "puntos")
-          console.log("el jugador con ", dominoplayers[jugadorConPuntajeMasBajo(dominoplayers)].puntaje), "es el ganador";
+          console.log("el jugador con ", dominoplayers[jugadorConPuntajeMasBajo(dominoplayers)].puntaje, "es el ganador");
         }
 
         finDelJuego = !finDelJuego
@@ -188,26 +188,20 @@ async function jugar() {
       } else if (inicioJuego == false && result.izquierda == result.derecha) {
         console.log("funciona please")
         well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-        // inicioJuego = true;
+        
+        inicioJuego = true;
         jugadorI = (jugadorI + 1) % players
 
 
 
-      } else if (validationDerecha(result)) {
+      } else if (validationDerecha(result) == true) {
 
         console.log("funciona please")
-        well.unshift(dominoplayers[jugadorI].fichas.splice(indiceFicha, 1)[0]);
-
-      } else if (validationIzquierda(result)) {
-        console.log("funciona pleasa izquierda")
+       
         well.push(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
-
-
-
-
-
-
-
+      } else if (validationIzquierda(result) == true) {
+        console.log("funciona pleasa izquierda")
+        well.unshift(dominoplayers["player_"+jugadorI].fichas.splice(indiceFicha, 1)[0]);
       }
       jugadorI = (jugadorI + 1) % players
     } winner == !winner
