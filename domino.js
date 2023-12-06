@@ -78,7 +78,7 @@ async function jugar() {
     if (
       result.derecha == well[0].izquierda ||
 
-      result.izquierda == well[0].izquierda
+      result.izquierda == well[0].derecha
     ) {
       return true;
     } else {
@@ -90,7 +90,7 @@ async function jugar() {
 
       result.derecha == well[well.length - 1].derecha ||
 
-      result.izquierda == well[well.length - 1].derecha
+      result.izquierda == well[well.length - 1].izquierda
     ) {
       return true;
     } else {
@@ -160,17 +160,17 @@ async function jugar() {
    
       if(inicioJuego == false){
       
-      }else if(valIzquierda == true){
-        console.log(well[0].izquierda, "tiene que ser igual al valor de derecha")
       }else if(valIzquierda == false){
+        console.log(well[0].izquierda, "tiene que ser igual al valor de derecha")
+      }else if(valIzquierda == true){
         console.log(well[0].derecha, "tiene que ser igual al valor de izquierda")
       }else{
       };
       
       if(inicioJuego == false){
-      }else if(valDerecha == false){
-        console.log(well[well.length - 1].derecha, "tiene que ser igual al valor de izquierda")
       }else if(valDerecha == true){
+        console.log(well[well.length - 1].derecha, "tiene que ser igual al valor de izquierda")
+      }else if(valDerecha == false){
         console.log(well[well.length - 1].izquierda, "tiene que ser igual al valor de izquierda")
       };
 
