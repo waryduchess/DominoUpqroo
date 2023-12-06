@@ -233,10 +233,10 @@ async function jugar() {
         } else if (valIzquierda == false && well[0].izquierda == result.derecha) {
           well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
           valIzquierda = !valIzquierda
-        } else if (valDerecha == true && well[well.length - 1].derecha == result.izquierda) {
+        } else if (valDerecha == true && well[0].derecha == result.izquierda) {
           well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
           valIzquierda = !valIzquierda
-        } else if (valDerecha == true && well[well.length - 1].derecha == result.derecha) {
+        } else if (valDerecha == true && well[0].derecha == result.derecha) {
           well.unshift(dominoplayers["player_" + jugadorI].fichas.splice(indiceFicha, 1)[0]);
           valIzquierda = !valIzquierda
         }
